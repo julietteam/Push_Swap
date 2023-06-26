@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juandrie <juandrie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: julietteandrieux <julietteandrieux@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 15:10:04 by juandrie          #+#    #+#             */
-/*   Updated: 2023/06/22 17:47:15 by juandrie         ###   ########.fr       */
+/*   Updated: 2023/06/26 22:03:04 by julietteand      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
@@ -18,38 +19,26 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
-#include <stdbool.h>
+# include <stdbool.h>
 
 typedef struct 
 {
-        int *stack;
+        long long *stack;
         int size;
 } Stack;
 
+#define STACK_SIZE 100
+
 Stack *create_stack(int size);
-void push(Stack *stack, int value);
+void push(Stack *stack, long long number);
 void destroy_stack(Stack *stack);
-void perform_pa(Stack *stack_a, Stack *stack_b);
-void perform_rra(Stack *stack_a);
-void perform_rrb(Stack *stack_b);
-void perform_rrr(Stack *stack_a, Stack *stack_b);
-void perform_ra(Stack *stack_a);
-void perform_rb(Stack *stack_b);
-void perform_rr(Stack *stack_a, Stack *stack_b);
-void perform_pb(Stack *stack_a, Stack *stack_b);
-void perform_sa(Stack *stack_a);
-void perform_sb(Stack *stack_b);
-void perform_ss(Stack *stack_a, Stack *stack_b);
-int should_perform_rra(Stack *stack_a, int value);
-int should_perform_ra(Stack *stack_a, int value);
-int find_min_index(Stack *stack);
-void rotate_to_index(Stack *stack, int index);
-int find_max_index(Stack *stack);
 int getMax(int arr[], int n);
 void countSort(int arr[], int n, int exp);
-void radixsort(int arr[], int n);
+void my_radixsort(int arr[], int n);
 void print_stack(Stack *stack);
 void push_swap(Stack *stack_a, Stack *stack_b);
+int find_min_index(Stack *stack_a, int size_a);
+//int find_max_index(Stack *stack_b, int size_b);
 void sa(Stack *stack);
 void sb(Stack *stack);
 void ss(Stack *stack_a, Stack *stack_b);
@@ -61,7 +50,8 @@ void rr(Stack *stack_a, Stack *stack_b);
 void rra(Stack *stack);
 void rrb(Stack *stack);
 void rrr(Stack *stack_a, Stack *stack_b);
-
+int is_sorted(Stack *stack);
+void selection_sort(Stack* stack_a, Stack* stack_b);
 
 
 #endif

@@ -3,195 +3,217 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juandrie <juandrie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: julietteandrieux <julietteandrieux@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 16:12:41 by juandrie          #+#    #+#             */
-/*   Updated: 2023/06/22 17:48:43 by juandrie         ###   ########.fr       */
+/*   Updated: 2023/06/26 22:01:06 by julietteand      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void push(Stack *stack, int value) 
-{
-    // Vérifier si l'élément est déjà présent dans la pile
-    int i = 0;
-    int found = 0;
-    while (i < stack->size) {
-        if (stack->stack[i] == value) {
-            // L'élément est un doublon, prendre une action appropriée
-            found = 1;
-            break;
+void push(Stack* stack, long long number) {
+    if (number > 0) {
+        // Vérifier si le nombre positif est déjà présent
+        int isDuplicate = 0;
+        int i = 0;
+        
+        // Parcourir la pile pour vérifier les doublons
+        while (i < stack->size) {
+            if (stack->stack[i] == number) {
+                isDuplicate = 1;
+                break;
+            }
+            i++;
         }
-        i++;
+        
+        // Si le nombre est un doublon, afficher un message d'erreur
+        if (isDuplicate) {
+            ft_printf("Error: Duplicate number\n");
+            exit(1);
+        }
+        
+        // Ajouter le nombre à la pile
+        stack->stack[stack->size] = number;
+        stack->size++;
     }
+}
 
-    if (found == 0) {
-        // L'élément n'est pas un doublon, l'insérer dans la pile
-        stack->stack[stack->size++] = value;
+void sa(Stack* stack) {
+    if (stack->size < 2)
+        return;
+
+    int temp = stack->stack[0];
+    stack->stack[0] = stack->stack[1];
+    stack->stack[1] = temp;
+    ft_printf("sa\n");
+}
+
+void ra(Stack* stack) {
+    if (stack->size <= 1)
+        return;
+
+    int temp = stack->stack[0];
+    for (int i = 1; i < stack->size; i++) {
+        stack->stack[i - 1] = stack->stack[i];
     }
-}
-
-void perform_rrb(Stack *stack_b)
-{
-    rrb(stack_b);
-    printf("rrb\n");
-}
-
-void perform_rrr(Stack *stack_a, Stack *stack_b)
-{
-    rrr(stack_a, stack_b);
-    printf("rrr\n");
-}
-void perform_rra(Stack *stack_a) {
-    rra(stack_a);
-    printf("rra\n");
-}
-
-void perform_ra(Stack *stack_a) {
-    ra(stack_a);
+    stack->stack[stack->size - 1] = temp;
     printf("ra\n");
 }
 
-void perform_rb(Stack *stack_b)
-{
-    rb(stack_b);
-    printf("rb\n");
+void pb(Stack* src, Stack* dest) {
+    if (src->size <= 0)
+        return;
+
+    dest->stack[dest->size] = src->stack[src->size - 1];
+    (dest->size)++;
+    (src->size)--;
+    ft_printf("pb\n");
 }
 
-void perform_rr(Stack *stack_a, Stack *stack_b)
-{
-    rr(stack_a, stack_b);
-    printf("rr\n");
+void pa(Stack* dest, Stack* src) {
+    if (src->size <= 0)
+        return;
+
+    dest->stack[dest->size] = src->stack[src->size - 1];
+    (dest->size)++;
+    (src->size)--;
+    ft_printf("pa\n");
 }
 
-void perform_pa(Stack *stack_a, Stack *stack_b) {
-    pa(stack_a, stack_b);
-    printf("pa\n");
+void selection_sort(Stack* stack_a, Stack* stack_b) {
+    int size = stack_a->size;
+    while (size > 0) {
+        int min_index = find_min_index(stack_a, size);
+
+        // Si l'élément minimum est proche du sommet, effectuer une rotation vers le haut
+        if (min_index <= size / 2) {
+            while (min_index > 0) {
+                ra(stack_a);
+                min_index--;
+            }
+        }
+        // Sinon, effectuer une rotation vers le bas
+        else {
+            min_index = size - min_index;
+            while (min_index > 0) {
+                rra(stack_a);
+                min_index--;
+            }
+        }
+
+        pb(stack_a, stack_b);
+        size--;
+    }
 }
 
-void perform_pb(Stack *stack_a, Stack *stack_b) {
-    pb(stack_a, stack_b);
-    printf("pb\n");
+void push_swap(Stack* stack_a, Stack* stack_b) {
+    int size = stack_a->size;
+    while (size > 0) {
+        int min_index = 0;
+        int min_value = stack_a->stack[0];
+
+        // Trouver l'élément minimum dans stack_a
+        int i = 1;
+        while (i < size) {
+            if (stack_a->stack[i] < min_value) {
+                min_value = stack_a->stack[i];
+                min_index = i;
+            }
+            i++;
+        }
+
+        // Déplacer l'élément minimum de stack_a vers stack_b
+        int j = min_index;
+        while (j < stack_a->size - 1) {
+            pb(stack_a, stack_b);
+            if (j == 0)
+                j = stack_a->size - 1;
+            else
+                j--;
+        }
+        pb(stack_a, stack_b);
+        size--;
+    }
+
+    // Remettre les éléments de stack_b dans stack_a dans l'ordre décroissant
+    while (stack_b->size > 0) {
+        pa(stack_a, stack_b);
+        if (stack_a->size >= 2 && stack_a->stack[0] > stack_a->stack[1])
+            sa(stack_a);
+    }
 }
 
-void perform_sa(Stack *stack_a)
-{
-    sa(stack_a);
-    printf("sa\n");
-}
+int find_min_index(Stack* stack_a, int size_a) {
+    int min_index = 0;
+    int min_value = stack_a->stack[0];
 
-void perform_sb(Stack *stack_b) {
-    sb(stack_b);
-    printf("sb\n");
-}
-
-void perform_ss(Stack *stack_a, Stack *stack_b)
-{
-    ss(stack_a, stack_b);
-    printf("ss\n");
-}
-
-
-int should_perform_rra(Stack *stack_a, int value)
-{
-    int max_index = find_max_index(stack_a);
-    int current_index = find_index(stack_a, value);
-
-    if (current_index > max_index / 2)
-        return 1;
-    else
-        return 0;
-}
-
-int should_perform_ra(Stack *stack_a, int value)
-{
-    int max_index = find_max_index(stack_a);
-    int current_index = find_index(stack_a, value);
-
-    if (current_index <= max_index / 2)
-        return 1;
-    else
-        return 0;
-}
-
-int find_min_index(Stack *stack_b) {
-    int min = stack_b->stack[stack_b->size - 1];
-    int min_index = stack_b->size - 1;
-    int i = stack_b->size - 2;
-    while (i >= 0) {
-        if (stack_b->stack[i] < min) {
-            min = stack_b->stack[i];
+    int i = 1;
+    while (i < size_a) {
+        if (stack_a->stack[i] < min_value) {
+            min_value = stack_a->stack[i];
             min_index = i;
         }
-        i--;
+        i++;
     }
+
     return min_index;
 }
 
-int find_max_index(Stack *stack_b) {
-    int max = stack_b->stack[stack_b->size - 1];
-    int max_index = stack_b->size - 1;
-    int i = stack_b->size - 1;
-    while (i >= 0) {
-        if (stack_b->stack[i] > max) {
-            max = stack_b->stack[i];
-            max_index = i;
-        }
-        i--;
+int main(int argc, char** argv) {
+    if (argc < 2) {
+        return 0;
     }
-    return max_index;
-}
 
-void rotate_to_index(Stack *stack, int index) {
-    int i = 0;
-    while (i < index) {
-        rb(stack);
-        printf("rb\n");
+    Stack* stack_a = create_stack(argc - 1);
+    Stack* stack_b = create_stack(argc - 1);
+
+    int i = 1;
+    while (i < argc) {
+        char* arg = argv[i];
+
+        // Vérification de chaque caractère de l'argument
+        int j = 0;
+        while (arg[j] != '\0') {
+            if (arg[j] < '0' || arg[j] > '9') {
+                fprintf(stderr, "Error\n");
+                destroy_stack(stack_a);
+                destroy_stack(stack_b);
+                return 1;
+            }
+            j++;
+        }
+
+        int value = atoi(arg);
+        push(stack_a, value);
+
         i++;
     }
+
+    push_swap(stack_a, stack_b);
+
+    destroy_stack(stack_a);
+    destroy_stack(stack_b);
+
+    return 0;
 }
 
-void push_swap(Stack *stack_a, Stack *stack_b) 
-{
-    int size = stack_a->size;
-    int *arr = stack_a->stack;
-    radixsort(arr, size);
+/*
 
-    int i = size - 1;
-    while (i >= 0) 
-    {
-        if (arr[i] == stack_a->stack[stack_a->size - 1])
-        { 
-            perform_pa(stack_a, stack_b);
-            i--;
+// Trouver l'indice de la valeur maximale dans stack_b
+int find_max_index(Stack *stack_b, int size_b) {
+    int max_index = 0;
+    int max_value = stack_b->stack[0];
+
+    int i = 1;
+    while (i < size_b) {
+        if (stack_b->stack[i] > max_value) {
+            max_value = stack_b->stack[i];
+            max_index = i;
         }
-        else
-        {
-            if (should_perform_rra(stack_a, i))
-            {
-                perform_rra(stack_a);
-            }
-            else if (should_perform_ra(stack_a, i))
-            {
-                perform_ra(stack_a);
-            }
-            else 
-            {
-                perform_pb(stack_a, stack_b);
-                if (should_perform_sb(stack_b))
-                {
-                    perform_sb(stack_b);
-                }
-            }
-        }
+        i++;
     }
 
-    int min_index = find_min_index(stack_b);
-    rotate_to_index(stack_b, min_index);
-    perform_pa(stack_b, stack_a);
-
-    int max_index = find_max_index(stack_b);
-    rotate_to_index(stack_b, max_index);
-    perform_pa(stack_b, stack_a);
+    return max_index;
 }
+*/

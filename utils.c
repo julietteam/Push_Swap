@@ -3,20 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juandrie <juandrie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: julietteandrieux <julietteandrieux@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 11:48:37 by juandrie          #+#    #+#             */
-/*   Updated: 2023/06/22 16:12:36 by juandrie         ###   ########.fr       */
+/*   Updated: 2023/06/26 18:17:34 by julietteand      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
 
-Stack *create_stack(int size)
-{
+Stack *create_stack(int size) {
     Stack *stack = malloc(sizeof(Stack));
-    stack->stack = malloc(size * sizeof(int));
+    stack->stack = malloc(size * sizeof(long long));
     stack->size = 0;
     return stack;
 }

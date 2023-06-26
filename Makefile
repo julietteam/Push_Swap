@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: juandrie <juandrie@student.42.fr>          +#+  +:+       +#+         #
+#    By: julietteandrieux <julietteandrieux@stud    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/21 15:14:25 by juandrie          #+#    #+#              #
-#    Updated: 2023/06/22 16:17:29 by juandrie         ###   ########.fr        #
+#    Updated: 2023/06/26 17:57:29 by julietteand      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 

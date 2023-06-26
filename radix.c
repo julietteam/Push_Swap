@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   radix.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juandrie <juandrie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: julietteandrieux <julietteandrieux@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 15:04:49 by juandrie          #+#    #+#             */
-/*   Updated: 2023/06/22 16:13:05 by juandrie         ###   ########.fr       */
+/*   Updated: 2023/06/26 21:42:02 by julietteand      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void countSort(int arr[], int n, int exp)
 }
 
 
-void radixsort(int arr[], int n)
+void my_radixsort(int arr[], int n)
 {
     int m = getMax(arr, n);
 
@@ -78,35 +78,3 @@ void print_stack(Stack *stack)
     }
     ft_putchar('\n');
 }
-
-
-
-
-int main() 
-{
-    int size;
-    ft_printf("Enter the size of the stack: ");
-    ft_printf("%d", &size);
-
-    Stack *stack_a = create_stack(size);
-    Stack *stack_b = create_stack(size);
-
-    ft_printf("Enter the elements of the stack: ");
-    int i = 0;
-    while (i < size) 
-    {
-        ft_printf("%d", &(stack_a->stack[i]));
-        (stack_a->size)++;
-        i++;
-    }
-
-    push_swap(stack_a, stack_b);
-    ft_printf("Final sorted stack: ");
-    print_stack(stack_a);
-
-    destroy_stack(stack_a);
-    destroy_stack(stack_b);
-
-    return 0;
-}
-
