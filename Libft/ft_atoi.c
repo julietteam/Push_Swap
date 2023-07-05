@@ -3,18 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juandrie <juandrie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: julietteandrieux <julietteandrieux@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:29:17 by juandrie          #+#    #+#             */
-/*   Updated: 2023/05/17 14:23:33 by juandrie         ###   ########.fr       */
+/*   Updated: 2023/07/04 15:12:09 by julietteand      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_atoi(const char *nptr)
+
+long long int	ft_atoi(const char *nptr)
 {
-	int	result;
+	long long int	result;
+	int				sign;
+	int				i;
+
+	result = 0;
+	sign = 1;
+	i = 0;
+	while (nptr[i] == 32 || (nptr[i] >= 9 && nptr[i] <= 13))
+		i++;
+	if (nptr[i] == '-' || nptr[i] == '+')
+	{
+		if (nptr[i] == '-')
+			sign = sign * (-1);
+		i++;
+	}
+	while (nptr[i] >= '0' && nptr[i] <= '9')
+	{
+		if ((result > LLONG_MAX / 10) || ((result == LLONG_MAX / 10) && (nptr[i] - '0') > (LLONG_MAX % 10)))
+		{
+			if (sign == 1)
+				return (-1);	// overflow
+			else
+				return (0);		// underflow
+		}
+		result = result * 10 + (nptr[i] - '0');
+		i++;
+	}
+	return ((int)(result * sign));
+}
+
+/*
+long long	ft_atoi(const char *nptr)
+{
+	long long	result;
 	int	sign;
 	int	i;
 
@@ -37,7 +71,7 @@ int	ft_atoi(const char *nptr)
 	}
 	return (result * sign);
 }
-/*
+
 int	main()
 {
 	char	nptr[] = "          -1234ab567";

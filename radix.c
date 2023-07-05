@@ -6,7 +6,7 @@
 /*   By: julietteandrieux <julietteandrieux@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 15:04:49 by juandrie          #+#    #+#             */
-/*   Updated: 2023/06/26 21:42:02 by julietteand      ###   ########.fr       */
+/*   Updated: 2023/07/05 22:42:35 by julietteand      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,66 +15,56 @@
 #include "push_swap.h"
 
 
-int getMax(int arr[], int n)
+void radix_sort(t_stack *stack_a, t_stack *stack_b)
 {
-	int mx = arr[0];
-	int i = 1;
-    while (i < n)
-    {
-        if (arr[i] > mx)
-            mx = arr[i];
-        i++;
-    }
-    return (mx);
+	int max_value = get_max_value(stack_a->numbers, stack_a->start, stack_a->end);
+	int num_digits = get_num_digits(max_value);
+	int divisor = 1;
+
+	int i = 0;
+    if (is_sorted(stack_a))
+    return;
+
+	while (i < num_digits)
+	{
+		// Réinitialiser les compteurs pour chaque itération de tri radix
+		int count[10] = {0};
+
+		// Compter le nombre d'éléments pour chaque chiffre dans la plage spécifiée
+		int j = stack_a->start;
+		while (j <= stack_a->end)
+		{
+			count[(stack_a->numbers[j] / divisor) % 10]++;
+			j++;
+		}
+
+		// Calculer les positions finales pour chaque chiffre
+		int k = 1;
+		while (k < 10)
+		{
+			count[k] += count[k - 1];
+			k++;
+		}
+
+		// Placer les éléments dans le bon ordre dans stack_b
+		int l = stack_a->end;
+		while (l >= stack_a->start)
+		{
+			int digit = (stack_a->numbers[l] / divisor) % 10;
+			stack_b->numbers[--count[digit]] = stack_a->numbers[l];
+			l--;
+		}
+
+		// Copier les éléments triés de stack_b vers stack_a en ordre croissant
+        int m = stack_a->start;
+		while (m <= stack_a->end)
+		{
+   			stack_a->numbers[m] = stack_b->numbers[m];
+    		m++;
+		}
+		divisor *= 10;
+		i++;
+	}
 }
 
-void countSort(int arr[], int n, int exp)
-{
-    int output[n];
-    int count[10] = {0};
-    int i = 0;
-    while (i < n)
-        count[i++] = 0;
-    i = 0;
-    while (i < n)
-        count[(arr[i++] / exp) % 10]++;
-    i = 1;
-    while (i < 10)
-        count[i] += count[i - 1]++;
-    i = n - 1;
-    while (i >= 0)
-    {
-        output[count[(arr[i] / exp) % 10] - 1] = arr[i];
-        count[(arr[i] / exp) % 10]--;
-        i--;
-    }
-    i = 0;
-    while (i < n)
-    {
-        arr[i] = output[i];
-        i++;
-    }
-}
 
-
-void my_radixsort(int arr[], int n)
-{
-    int m = getMax(arr, n);
-
-    int exp = 1;
-    while (m / exp > 0)
-    {
-        countSort(arr, n, exp);
-        exp *= 10;
-    }
-}
-void print_stack(Stack *stack)
-{
-    int i = 0;
-    while (i < stack->size)
-    {
-        ft_printf("%d ", stack->stack[i]);
-        i++;
-    }
-    ft_putchar('\n');
-}

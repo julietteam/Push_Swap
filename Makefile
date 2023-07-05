@@ -6,13 +6,14 @@
 #    By: julietteandrieux <julietteandrieux@stud    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/21 15:14:25 by juandrie          #+#    #+#              #
-#    Updated: 2023/06/26 17:57:29 by julietteand      ###   ########.fr        #
+#    Updated: 2023/07/05 16:40:37 by julietteand      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = push_swap
 
 SRCS = radix.c move.c push_swap.c utils.c 
+
 
 OBJS = $(SRCS:.c=.o)
 

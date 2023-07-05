@@ -6,7 +6,7 @@
 /*   By: julietteandrieux <julietteandrieux@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 15:10:04 by juandrie          #+#    #+#             */
-/*   Updated: 2023/06/26 22:03:04 by julietteand      ###   ########.fr       */
+/*   Updated: 2023/07/05 22:42:02 by julietteand      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,44 +14,71 @@
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
+#define MAX_NUMBERS 1000 // Remplacez la valeur 1000 par la taille maximale souhaitée
+#define MAX_OPERATIONS 1000 // Remplacez la valeur 1000 par la taille maximale souhaitée
 # include "Libft/libft.h"
 # include "Libft/ft_printf.h"
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
 # include <stdbool.h>
+# include <limits.h>
 
-typedef struct 
-{
-        long long *stack;
-        int size;
-} Stack;
+typedef enum {
+	RA,
+	RB,
+	RR,
+	RRA,
+	RRB,
+	RRR,
+	SA,
+	SB,
+	SS,
+	PA,
+	PB,
+} t_operation;
 
-#define STACK_SIZE 100
+typedef struct s_stack {
+    long long int numbers[MAX_NUMBERS];
+    int start;
+    int end;
+    int top;
+    char **operations;
+    int op_index;
+} t_stack;
 
-Stack *create_stack(int size);
-void push(Stack *stack, long long number);
-void destroy_stack(Stack *stack);
-int getMax(int arr[], int n);
-void countSort(int arr[], int n, int exp);
-void my_radixsort(int arr[], int n);
-void print_stack(Stack *stack);
-void push_swap(Stack *stack_a, Stack *stack_b);
-int find_min_index(Stack *stack_a, int size_a);
-//int find_max_index(Stack *stack_b, int size_b);
-void sa(Stack *stack);
-void sb(Stack *stack);
-void ss(Stack *stack_a, Stack *stack_b);
-void pa(Stack *src, Stack *dest);
-void pb(Stack *src, Stack *dest);
-void ra(Stack *stack);
-void rb(Stack *stack);
-void rr(Stack *stack_a, Stack *stack_b);
-void rra(Stack *stack);
-void rrb(Stack *stack);
-void rrr(Stack *stack_a, Stack *stack_b);
-int is_sorted(Stack *stack);
-void selection_sort(Stack* stack_a, Stack* stack_b);
+
+
+
+void	swap(t_stack *stack);
+void	push(t_stack *src, t_stack *dst);
+void	rotate(t_stack *stack);
+void	reverse_rotate(t_stack *stack);
+int		get_max_value(long long int *array, int start, int end);
+long long int		get_num_digits(long long int number);
+void	radix_sort(t_stack *stack_a, t_stack *stack_b);
+int		is_sorted(t_stack *stack);
+long long int		check_duplicates(long long int *numbers, int count);
+void	ft_putnbr(long long int n);
+int		is_valid_number_and_no_overflow(char *str);
+void print_sa(t_stack *stack_a);
+void print_sb(t_stack *stack_b);
+void print_ss(t_stack *stack_a, t_stack *stack_b);
+void print_pa(t_stack *stack_a, t_stack *stack_b);
+void print_pb(t_stack *stack_a, t_stack *stack_b);
+void print_ra(t_stack *stack_a);
+void print_rb(t_stack *stack_b);
+void print_rr(t_stack *stack_a, t_stack *stack_b);
+void print_rra(t_stack *stack_a);
+void print_rrb(t_stack *stack_b);
+void print_rrr(t_stack *stack_a, t_stack *stack_b);
+int find_smallest_index(t_stack *stack);
+void print_operations(t_stack *stack_a);
+void push_swap_sort(t_stack *stack_a, t_stack *stack_b);
+void initialize_stack(t_stack *stack);
+void destroy_stack(t_stack *stack);
+void initialize_operations(t_stack *stack);
+void print_stack(t_stack *stack_a, t_stack *stack_b);
 
 
 #endif
