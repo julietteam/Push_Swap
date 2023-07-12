@@ -6,7 +6,7 @@
 /*   By: julietteandrieux <julietteandrieux@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 21:21:58 by julietteand       #+#    #+#             */
-/*   Updated: 2023/07/10 23:18:34 by julietteand      ###   ########.fr       */
+/*   Updated: 2023/07/12 17:11:32 by julietteand      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,32 +30,42 @@ void	free_and_exit_with_message(t_stack *stack, char *msg)
 	exit(1);
 }
 
-static void	validate_arguments(int argc, char **argv)
-{
-	int	i;
-	int	j;
 
-	i = 0;
-	if (argc < 2)
-		free_and_exit_with_message(NULL, "");
-	while (++i < argc)
-	{
-		j = 0;
-		if (argv[i][0] == '\0')
-			free_and_exit_with_message(NULL, "Error\n");
-		while (argv[i][j] != '\0')
-		{
+static void validate_arguments(int argc, char **argv)
+{
+    int i, j;
+
+    i = 0;
+    if (argc < 2)
+        free_and_exit_with_message(NULL, "");
+
+    while (++i < argc)
+    {
+        j = 0;
+        if (argv[i][0] == '\0')
+            free_and_exit_with_message(NULL, "Error\n");
+        while (argv[i][j] != '\0')
+        {
+
 			if ((!(ft_isdigit(argv[i][j])) && (argv[i][j] != ' ')
 			&& (argv[i][j] != '-' && argv[i][j] != '+' && argv[i][j] != ' '))
 			|| (argv[i][j] == '-' && argv[i][j + 1] == '\0')
 			|| (argv[i][j] == '+' && argv[i][j + 1] == '\0')
 			|| (argv[i][j] == '-' && argv[i][j + 1] == ' ')
 			|| (argv[i][j] == '+' && argv[i][j + 1] == ' '))
-				free_and_exit_with_message(NULL, "Error\n");
+			{
+                free_and_exit_with_message(NULL, "Error\n");
+            }
 			j++;
-		}
-	}
+        }
+		long long num;
+        if (is_valid_integer(argv[i], &num) != 0)
+        {
+          free_and_exit_with_message(NULL, "Error\n");
+        }
+    }
 }
+
 
 static void	join_args(int argc, char **argv, t_stack *stack)
 {
@@ -85,6 +95,8 @@ static void	join_args(int argc, char **argv, t_stack *stack)
 		free(tmp);
 }
 
+
+
 int	main(int argc, char **argv)
 {
 	t_stack	*stack;
@@ -105,7 +117,7 @@ int	main(int argc, char **argv)
 	else if (stack->a_size >= 4 && stack->a_size <= 5)
 		sort_four_to_five_elements(stack);
 	else
-		radix_sort(stack);
+        radix_sort(stack);
 	exit_if_sorted_or_has_duplicate(stack, 1);
 	free_and_exit_with_message(stack, "Error\n");
 	return (0);

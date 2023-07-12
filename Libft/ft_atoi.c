@@ -6,13 +6,13 @@
 /*   By: julietteandrieux <julietteandrieux@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:29:17 by juandrie          #+#    #+#             */
-/*   Updated: 2023/07/04 15:12:09 by julietteand      ###   ########.fr       */
+/*   Updated: 2023/07/11 22:33:36 by julietteand      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-
+/*
 long long int	ft_atoi(const char *nptr)
 {
 	long long int	result;
@@ -44,11 +44,11 @@ long long int	ft_atoi(const char *nptr)
 	}
 	return ((int)(result * sign));
 }
+*/
 
-/*
-long long	ft_atoi(const char *nptr)
+int	ft_atoi(const char *nptr)
 {
-	long long	result;
+	int	result;
 	int	sign;
 	int	i;
 
@@ -71,7 +71,7 @@ long long	ft_atoi(const char *nptr)
 	}
 	return (result * sign);
 }
-
+/*
 int	main()
 {
 	char	nptr[] = "          -1234ab567";

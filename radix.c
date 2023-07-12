@@ -6,13 +6,15 @@
 /*   By: julietteandrieux <julietteandrieux@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 15:04:49 by juandrie          #+#    #+#             */
-/*   Updated: 2023/07/10 23:08:35 by julietteand      ###   ########.fr       */
+/*   Updated: 2023/07/12 00:07:53 by julietteand      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Libft/libft.h"
 #include "Libft/ft_printf.h"
 #include "push_swap.h"
+
+
 
 void	sort_three_elements(t_stack *stack)
 {
@@ -31,38 +33,44 @@ void	sort_three_elements(t_stack *stack)
 		swap("sa", stack->stack_a, stack->a_size);
 }
 
-void	sort_four_to_five_elements(t_stack *stack)
+void sort_four_to_five_elements(t_stack *stack)
 {
-    // Tant que la taille du tableau b est inférieure ou égale à 1
-	while (stack->b_size <= 1)
-	{
-		// Si le premier élément est 0 ou 1, on le pousse vers le tableau b
+    while (stack->b_size <= 1)
+    {
         if (stack->stack_a[0] == 0 || stack->stack_a[0] == 1)
-			push("pb", stack);
-        // Sinon, on le déplace vers le haut
-		else
-			rotate(stack->stack_a, stack->a_size, "up", "a");
-	}
-    // Si le premier élément du tableau b est 0, on échange les éléments du tableau b
-	if (stack->stack_b[0] == 0)
-		swap("sb", stack->stack_b, stack->b_size);
-    // Si le troisième élément du tableau b n'est pas 4
-	if (stack->stack_b[2] != 4)
-	{
-		// Si le premier élément est 4, on le déplace vers le haut
-        if (stack->stack_b[0] == 4)
-			rotate(stack->stack_a, stack->a_size, "up", "a");
-         // Sinon, on le déplace vers le bas
-		else
-			rotate(stack->stack_a, stack->a_size, "down", "a");
-	}
-    // Si le premier élément est plus grand que le deuxième élément, on les échange
-	if (stack->stack_a[0] > stack->stack_a[1])
-		swap("sa", stack->stack_a, stack->a_size);
-    // On pousse les éléments du tableau b vers le tableau a
-	push("pa", stack);
-	push("pa", stack);
+            push("pb", stack);
+        else
+            rotate(stack->stack_a, stack->a_size, "up", "a");
+    }
+
+    if (stack->stack_b[0] == 0)
+        swap("sb", stack->stack_b, stack->b_size);
+
+    if (stack->a_size == 5)
+    {
+        if (stack->stack_a[2] != 4 && stack->stack_a[2] != 5)
+        {
+            if (stack->stack_a[0] == 4 || stack->stack_a[0] == 5)
+                rotate(stack->stack_a, stack->a_size, "up", "a");
+            else
+                rotate(stack->stack_a, stack->a_size, "down", "a");
+        }
+    }
+    else if (stack->stack_a[2] != 4)
+    {
+        if (stack->stack_a[0] == 4)
+            rotate(stack->stack_a, stack->a_size, "up", "a");
+        else
+            rotate(stack->stack_a, stack->a_size, "down", "a");
+    }
+
+    if (stack->stack_a[0] > stack->stack_a[1])
+        swap("sa", stack->stack_a, stack->a_size);
+
+    push("pa", stack);
+    push("pa", stack);
 }
+
 
 int	is_array_sorted(t_stack *stack)
 {
@@ -110,7 +118,8 @@ void	radix_sort(t_stack *stack)
     // tant que la taille du tableau size est supérieure à 1 
 	while (size > 1 && ++bit_size)
     // On divise par 2. Ca permet de réduire la taille jusqu'à ce qu'il ne reste plus qu'un seul bit.
-		size = size / 2;
+		size /= 2;
+        //size = stack->a_size;
 	i = -1;
     // Tant i est inférieur ou égale à bit_size
 	while (++i <= bit_size)
@@ -118,7 +127,7 @@ void	radix_sort(t_stack *stack)
 		// on adapte size à la taille du tableau à trier
         size = stack->a_size;
         //tant que le tableau n'est pas encore trié et que size est supérieur ou égal à 0
-		while (size <= 0 && !is_array_sorted(stack))
+		while (size-- && !is_array_sorted(stack))
 		{
             // si le bit à la position i du premier nombre du tableau stack_a est égal à 0.
 			if (((stack->stack_a[0] >> i) & 1) == 0)

@@ -6,7 +6,7 @@
 #    By: julietteandrieux <julietteandrieux@stud    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/21 15:14:25 by juandrie          #+#    #+#              #
-#    Updated: 2023/07/10 21:45:04 by julietteand      ###   ########.fr        #
+#    Updated: 2023/07/12 18:09:56 by julietteand      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,14 +35,17 @@ all: $(NAME)
 
 clean:
 	rm -f $(OBJS)
+	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
 	rm -f $(NAME)
+	rm -f $(OBJS)
 	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
+
 
 .PHONY: all clean fclean re

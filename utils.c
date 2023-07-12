@@ -6,7 +6,7 @@
 /*   By: julietteandrieux <julietteandrieux@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 11:48:37 by juandrie          #+#    #+#             */
-/*   Updated: 2023/07/10 23:26:44 by julietteand      ###   ########.fr       */
+/*   Updated: 2023/07/12 17:43:11 by julietteand      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,24 +34,151 @@ void	exit_if_sorted_or_has_duplicate(t_stack *stack, int i)
 	}
 	if (is_array_sorted(stack))
 		free_and_exit_with_message(stack, NULL);
+		
 }
 
-void	parse_numbers(t_stack *stack)
+
+int is_valid_integer(const char *str, long long *result)
 {
-	char	**tmp;
-	int		i;
-	int		z;
+    int sign = 1;
+    int i = 0;
+    bool digit_found = false;
 
-	z = 0;
-	tmp = ft_split(stack->join_args, ' ');
-	i = 0;
-	while (tmp[i] != NULL && tmp[i][0] != '\0')
-	{
-		stack->stack_a[z++] = ft_atol(tmp[i++], stack);
-		free(tmp[i - 1]);
-	}
-	free(tmp);
+    // Gérer le signe négatif ou positif
+    if (str[i] == '-' || str[i] == '+')
+    {
+        if (str[i] == '-')
+            sign = -1;
+        i++;
+    }
+
+    // Vérifier chaque caractère pour s'assurer qu'il s'agit d'un chiffre
+    while (str[i] != '\0')
+    {
+        if (ft_isdigit(str[i]))
+        {
+            digit_found = true;
+            //printf("Current character: %c\n", str[i]);
+        }
+        else if (str[i] != ' ')
+        {
+            //printf("Error: Invalid character\n");
+            return 1;
+        }
+
+        i++;
+    }
+
+    // Vérifier si aucun chiffre n'a été trouvé
+    if (!digit_found)
+    {
+        //printf("Error: No digit found\n");
+        return 1;
+    }
+
+    // Vérifier si plusieurs signes se suivent avant la valeur numérique
+    if (i > 1 && (str[0] == '-' || str[0] == '+') && !(str[1] >= '0' && str[1] <= '9'))
+    {
+        //printf("Error: Multiple signs before numeric value\n");
+        return 1;
+    }
+
+    // Convertir la chaîne de caractères en nombre entier
+    *result = sign * ft_atoi_check_overflow(str, result);
+
+    // Vérifier le dépassement de capacité pour les valeurs négatives
+    if (sign == -1 && (*result < INT_MIN || *result > 0))
+    {
+        return 1;
+    }
+
+    // Vérifier le dépassement de capacité pour les valeurs positives
+    if (sign == 1 && (*result > INT_MAX || *result < 0))
+    {
+        return 1;
+    }
+
+
+    return 0;
 }
+
+
+int ft_atoi_check_overflow(const char *str, long long *result)
+{
+    long long r = 0;
+    int sign = 1;
+    int i = 0;
+
+    while (str[i] == ' ' || str[i] == '\n' || str[i] == '\t' ||
+           str[i] == '\v' || str[i] == '\f' || str[i] == '\r')
+        i++;
+
+    if (str[i] == '-' || str[i] == '+')
+    {
+        if (str[i] == '-')
+            sign = -1;
+        i++;
+    }
+
+    while (str[i] >= '0' && str[i] <= '9')
+    {
+        if (r > LLONG_MAX / 10 || (r == LLONG_MAX / 10 && (str[i] - '0') > LLONG_MAX % 10))
+        {
+            *result = 0;
+            return 1;
+        }
+        r = r * 10 + (str[i] - '0');
+        i++;
+    }
+
+    *result = r * sign;
+    // Vérifier si le résultat dépasse INT_MAX ou est inférieur à INT_MIN
+    if (*result > INT_MAX || *result < INT_MIN)
+    {
+        *result = 0;
+        return 1;  // Renvoyer une erreur en cas de dépassement
+    }
+
+    return 0;
+}
+
+
+
+void parse_numbers(t_stack *stack)
+{
+    char **tmp;
+    int i;
+    int z;
+
+    z = 0;
+    tmp = ft_split(stack->join_args, ' ');
+    i = 0;
+    while (tmp[i] != NULL && tmp[i][0] != '\0')
+    {
+        long long num;
+
+        if (ft_atoi_check_overflow(tmp[i], &num) == 0)
+        {
+            stack->stack_a[z] = (int)num;
+            z++;
+        }
+        else
+        {
+            printf("Error\n");
+            free(stack->stack_a);
+            free(tmp[i]);
+            free(tmp);
+            exit(1);
+        }
+        free(tmp[i]);
+        i++;
+    }
+    free(tmp);
+
+    stack->a_size = z;
+}
+
+
 
 int	ft_count_words(char const *s, char c)
 {
@@ -73,6 +200,7 @@ int	ft_count_words(char const *s, char c)
 	}
 	return (word);
 }
+
 
 void	initialize_stacks(int argc, char **argv, t_stack *stack)
 {
@@ -123,299 +251,3 @@ void	create_index(t_stack *stack)
 	free(new_a);
 }
 
-int	ft_atol(const char *nptr, t_stack *stack)
-{
-	int			i;
-	long		sign;
-	long long	res;
-
-	res = 0;
-	sign = 1;
-	i = 0;
-	while (nptr[i] == ' ' || (nptr[i] >= '\t' && nptr[i] <= '\r'))
-		i++;
-	if ((nptr[i] == '+' || nptr[i] == '-'))
-	{
-		if (nptr[i] == '-')
-			sign = -1;
-		i++;
-	}
-	while (nptr[i])
-	{
-		if (res > 2147483647 || (res * sign) < -2147483648)
-			free_and_exit_with_message(stack, "Error\n");
-		if (!(nptr[i] >= '0' && nptr[i] <= '9'))
-			free_and_exit_with_message(stack, "Error\n");
-		res = res * 10 + (nptr[i++] - '0');
-	}
-	return ((int)(res * sign));
-}
-
-/*
-t_stack *init_stack(int size)
-{
-    t_stack *stack = malloc(sizeof(t_stack));
-    if (stack == NULL)
-        return NULL;
-
-    stack->operations = malloc(size * sizeof(char *));
-    if (stack->operations == NULL)
-    {
-        free(stack);
-        return NULL;
-    }
-
-    stack->size = size;
-    stack->op_index = 0;
-
-    return stack;
-}
-
-void initialize_stack(t_stack *stack, int capacity) 
-{
-    stack->start = 0;
-    stack->end = -1;
-    stack->top = -1;
-    stack->op_index = 0;
-    stack->capacity = capacity;
-    stack->operations = NULL;
-    //  stack->operations = malloc(capacity * sizeof(int *));
-    //for(int i = 0; i < capacity; i++) 
-    //{
-    //    stack->operations[i] = NULL;
-    //}
-}
-
-
-void initialize_operations(t_stack *stack) {
-    stack->operations = malloc(MAX_OPERATIONS * sizeof(char *));
-    for (int i = 0; i < MAX_OPERATIONS; i++) {
-        stack->operations[i] = malloc(4 * sizeof(char));
-        stack->operations[i][0] = '\0'; // Initialise chaque chaîne à une chaîne vide
-        
-    }
-}
-
-void destroy_stack(t_stack *stack) {
-    if (stack->operations != NULL) {
-        for (int i = 0; i < stack->op_index; i++) {
-            free(stack->operations[i]);
-            stack->operations[i] = NULL;  // Ajouté pour éviter double free
-        }
-        free(stack->operations);
-        stack->operations = NULL;  // Ajouté pour éviter double free
-    }
-}
-
-
-int		get_max_value(long long int *array, int start, int end)
-{
-	int max = array[start];
-	int i = start + 1;
-	while (i <= end)
-	{
-		if (array[i] > max)
-			max = array[i];
-		i++;
-	}
-	return max;
-}
-
-int get_min_value(long long int *numbers, int start, int end) {
-    int min_value = numbers[start];
-    int i = start + 1;;
-
-   while (i <= end) {
-        if (numbers[i] < min_value) {
-            min_value = numbers[i];
-        }
-        i++;
-    }
-
-    return min_value;
-}
-
-
-
-long long int		get_num_digits(long long int number)
-{
-	int count = 0;
-	if (number == 0)
-		return 1;
-	while (number != 0)
-	{
-		number /= 10;
-		count++;
-	}
-	return count;
-}
-
-void ft_putnbr(long long int n)
-{
-    if (n < 0)
-    {
-        ft_putchar('-');
-        n = -n;
-    }
-
-    if (n >= 10)
-    {
-        ft_putnbr(n / 10);
-        ft_putnbr(n % 10);
-    }
-    else
-    {
-        ft_putchar(n + '0');
-    }
-}
-
-
-int		is_valid_number_and_no_overflow(char *str)
-{
-	int i;
-	long long num;
-	int sign;
-
-	i = 0;
-	sign = 1;
-	num = 0;
-
-	// si le nombre est négatif, on ignore le signe moins
-	if (str[0] == '-')
-	{
-		sign = -1;
-		i++;
-	}
-	while (str[i] != '\0')
-	{
-		// si le caractère n'est pas un chiffre, retourner 0 (faux)
-		if (!ft_isdigit(str[i]))
-			return (0);
-		// check if num will be out of range when left-shifted
-		if ((num > LLONG_MAX / 10) || ((num == LLONG_MAX / 10) && (str[i] - '0') > (LLONG_MAX % 10)))
-			return (0);
-		num = num * 10 + (str[i] - '0');
-		i++;
-	}
-
-	num *= sign;
-	if (num > INT_MAX || num < INT_MIN)
-		return (0);
-	return (1);
-}
-
-int find_smallest_index(t_stack *stack) {
-    int index = 0;
-    int smallest = stack->numbers[0];
-    for (int i = 1; i <= stack->top; i++) {
-        if (stack->numbers[i] < smallest) {
-            smallest = stack->numbers[i];
-            index = i;
-        }
-    }
-    return index;
-}
-
-int find_largest_index(t_stack *stack) {
-    int index = 0;
-    int largest = stack->numbers[0];
-    for (int i = 1; i <= stack->top; i++) {
-        if (stack->numbers[i] > largest) {
-            largest = stack->numbers[i];
-            index = i;
-        }
-    }
-    return index;
-}
-
-
-void print_operation_array(t_stack *stack)
-{
-    for (int i = 0; i < stack->op_index; i++)
-    {
-        char *operation = stack->operations[i];
-        if (operation != NULL)
-        {
-            if (strcmp(operation, "sa") == 0)
-            {
-                printf("sa\n");
-            }
-            else if (strcmp(operation, "sb") == 0)
-            {
-                printf("sb\n");
-            }
-            else if (strcmp(operation, "ss") == 0)
-            {
-                printf("ss\n");
-            }
-            else if (strcmp(operation, "pa") == 0)
-            {
-                printf("pa\n");
-            }
-            else if (strcmp(operation, "pb") == 0)
-            {
-                printf("pb\n");
-            }
-            else if (strcmp(operation, "ra") == 0)
-            {
-                printf("ra\n");
-            }
-            else if (strcmp(operation, "rb") == 0)
-            {
-                printf("rb\n");
-            }
-            else if (strcmp(operation, "rr") == 0)
-            {
-                printf("rr\n");
-            }
-            else if (strcmp(operation, "rra") == 0)
-            {
-                printf("rra\n");
-            }
-            else if (strcmp(operation, "rrb") == 0)
-            {
-                printf("rrb\n");
-            }
-            else if (strcmp(operation, "rrr") == 0)
-            {
-                printf("rrr\n");
-            }
-            else
-            {
-                printf("Unknown operation\n");
-            }
-        }
-    }
-}
-
-
-
-void add_operation(t_stack *stack, char *op)
-{
-    char *operation = malloc((strlen(op) + 1) * sizeof(char));
-    strcpy(operation, op);
-    stack->operations[stack->op_index] = operation;
-    stack->op_index++;
-}
-
-void add_operation(t_stack *stack, char *operation) {
-    // Allouer de la mémoire pour stocker l'opération
-    char *new_operation = strdup(operation);
-
-    // Mettre à jour le tableau d'opérations dans la structure t_stack
-    stack->operations[stack->op_index] = new_operation;
-    stack->op_index++;
-}
-
-
-// Fonction pour libérer la mémoire occupée par la liste d'opérations
-void free_operations(char **operations)
-{
-    int i = 0;
-    while (operations[i] != NULL) {
-        free(operations[i]);
-        i++;
-    }
-    free(operations);
-}
-*/
