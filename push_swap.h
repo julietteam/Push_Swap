@@ -6,17 +6,13 @@
 /*   By: julietteandrieux <julietteandrieux@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 15:10:04 by juandrie          #+#    #+#             */
-/*   Updated: 2023/07/12 16:41:12 by julietteand      ###   ########.fr       */
+/*   Updated: 2023/07/12 18:13:11 by julietteand      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
-
-#define MAX_NUMBERS 1000 // Remplacez la valeur 1000 par la taille maximale souhaitée
-#define MAX_OPERATIONS 1000 // Remplacez la valeur 1000 par la taille maximale souhaitée
-#define MAX_ARGUMENT_LENGTH 1000
 
 # include "Libft/libft.h"
 # include "Libft/ft_printf.h"
@@ -43,16 +39,15 @@ void	push(char *str, t_stack *stack);
 void	rotate(int *array, int size, char *direction, char *list);
 void	sort_three_elements(t_stack *stack);
 void	sort_four_to_five_elements(t_stack *stack);
-int	is_array_sorted(t_stack *stack);
+int		is_array_sorted(t_stack *stack);
 void	radix_sort(t_stack *stack);
 void	free_and_exit_with_message(t_stack *stack, char *msg);
 void	exit_if_sorted_or_has_duplicate(t_stack *stack, int i);
 void	parse_numbers(t_stack *stack);
 void	create_index(t_stack *stack);
 void	initialize_stacks(int argc, char **argv, t_stack *stack);
-int	ft_count_words(char const *s, char c);
-//int	ft_atol(const char *nptr, t_stack *stack);
-int is_valid_integer(const char *str, long long *result);
-int	ft_atoi_check_overflow(const char *str, long long *result);
+int		ft_count_words(char const *s, char c);
+int 	is_valid_integer(const char *str, long long *result);
+int		ft_atoi_check_overflow(const char *str, long long *result);
 
 #endif
