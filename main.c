@@ -6,7 +6,7 @@
 /*   By: julietteandrieux <julietteandrieux@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 21:21:58 by julietteand       #+#    #+#             */
-/*   Updated: 2023/07/12 17:11:32 by julietteand      ###   ########.fr       */
+/*   Updated: 2023/07/13 16:42:35 by julietteand      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,9 @@ void	free_and_exit_with_message(t_stack *stack, char *msg)
 static void validate_arguments(int argc, char **argv)
 {
     int i, j;
-
     i = 0;
     if (argc < 2)
         free_and_exit_with_message(NULL, "");
-
     while (++i < argc)
     {
         j = 0;
@@ -46,23 +44,17 @@ static void validate_arguments(int argc, char **argv)
             free_and_exit_with_message(NULL, "Error\n");
         while (argv[i][j] != '\0')
         {
-
-			if ((!(ft_isdigit(argv[i][j])) && (argv[i][j] != ' ')
-			&& (argv[i][j] != '-' && argv[i][j] != '+' && argv[i][j] != ' '))
+			if ((!(ft_isdigit(argv[i][j])) && (argv[i][j] != ' ') && (argv[i][j] != '-' && argv[i][j] != '+' && argv[i][j] != ' '))
 			|| (argv[i][j] == '-' && argv[i][j + 1] == '\0')
 			|| (argv[i][j] == '+' && argv[i][j + 1] == '\0')
 			|| (argv[i][j] == '-' && argv[i][j + 1] == ' ')
 			|| (argv[i][j] == '+' && argv[i][j + 1] == ' '))
-			{
                 free_and_exit_with_message(NULL, "Error\n");
-            }
 			j++;
         }
 		long long num;
         if (is_valid_integer(argv[i], &num) != 0)
-        {
           free_and_exit_with_message(NULL, "Error\n");
-        }
     }
 }
 
@@ -72,7 +64,6 @@ static void	join_args(int argc, char **argv, t_stack *stack)
 	char	*tmp;
 	char	*tmp2;
 	int		i;
-
 	i = 0;
 	tmp2 = ft_strdup("");
 	while (++i < argc && argv[i] != NULL)
