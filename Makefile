@@ -3,17 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: julietteandrieux <julietteandrieux@stud    +#+  +:+       +#+         #
+#    By: juandrie <juandrie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/21 15:14:25 by juandrie          #+#    #+#              #
-#    Updated: 2023/07/12 18:09:56 by julietteand      ###   ########.fr        #
+#    Updated: 2023/07/14 14:07:10 by juandrie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = push_swap
 
-SRCS = main.c radix.c move.c utils.c 
-
+SRCS = main.c initialize.c radix.c sort.c move.c utils.c 
 
 OBJS = $(SRCS:.c=.o)
 
