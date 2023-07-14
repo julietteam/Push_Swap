@@ -6,7 +6,7 @@
 /*   By: juandrie <juandrie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 11:48:37 by juandrie          #+#    #+#             */
-/*   Updated: 2023/07/14 14:07:41 by juandrie         ###   ########.fr       */
+/*   Updated: 2023/07/14 15:07:46 by juandrie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void	parse_numbers(t_stack *stack)
 			stack->stack_a[z++] = (int)num;
 		else
 		{
-			printf("Error\n");
+			ft_printf("Error\n");
 			free(stack->stack_a);
 			free(tmp[i]);
 			free(tmp);
